@@ -63,18 +63,20 @@ function getItemsList() {
   const inventoryColumns = ['item_id', 'product_name', 'department_name', 'price'];
   const query = connection.query('SELECT ?? FROM ??', [inventoryColumns, 'products'], function (error, results, fields) {
     if (error) throw error;
-    console.log(`\nInventory: \nitem id | name | department | price`)
-    for (var i = 0; i < results.length; i++) {
-      console.log(`${results[i].item_id} | ${results[i].product_name} | ${results[i].department_name} | \$${parseFloat(results[i].price).toFixed(2)}`);
-    }
+    console.log(`\nInventory: `);// \nitem id | name | department | price`)
+    // for (var i = 0; i < results.length; i++) {
+    //   console.log(`${results[i].item_id} | ${results[i].product_name} | ${results[i].department_name} | \$${parseFloat(results[i].price).toFixed(2)}`);
+    // }
     const inventoryTable = new Table({
       head: inventoryColumns,
       colWidths: [25, 25, 25, 25]
     });
-    inventoryTable.push(
-      ['First value', 'Second value', '3rd', '4th'],
-      ['First value', 'Second value', '3rd', '4th']
-    );
+    for (let i = 0; i < results.length; i++) {
+      inventoryTable.push(
+        [results[i].item_id, 'Second value', '3rd', '4th'],
+        // ['First value', 'Second value', '3rd', '4th']
+      );
+    }
     console.log(inventoryTable.toString());
   });
   console.log(query.sql);
