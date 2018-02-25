@@ -69,11 +69,11 @@ function getItemsList() {
     // }
     const inventoryTable = new Table({
       head: inventoryColumns,
-      colWidths: [25, 25, 25, 25]
+      colWidths: [10, 45, 25, 10]
     });
     for (let i = 0; i < results.length; i++) {
       inventoryTable.push(
-        [results[i].item_id, 'Second value', '3rd', '4th'],
+        [results[i].item_id, results[i].product_name, results[i].department_name, parseFloat(results[i].price).toFixed(2)],
         // ['First value', 'Second value', '3rd', '4th']
       );
     }
