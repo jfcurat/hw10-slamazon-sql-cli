@@ -34,56 +34,88 @@ connection.connect(err => {
   console.log(`Connected as id ${connection.threadId}`);
 
   getItemsList();
-
-  inquisition();
+  // inquisition();
 
   connection.end();
 });
 
-// ask for item_id & amount to buy
-function inquisition() {
-  inquirer
-    .prompt([
-      {
-        type: 'input',
-        message: 'Please enter ID of product you\'d like to buy:',
-        name: 'productToBuy',
-      },
-      {
-        type: 'input',
-        message: 'How many would you like to buy?',
-        name: 'amountToBuy',
+// display inventory table
+function getItemsList() {
+  const inventoryColumns = ['item_id', 'product_name', 'department_name', 'price', 'stock_quantity'];
+
+  const query = connection.query('SELECT ?? FROM ??',
+    [inventoryColumns, 'products'],
+    (error, results) => {
+      if (error) throw error;
+
+      console.log(`\nInventory: `);
+
+      const inventoryTable = new Table({
+        head: inventoryColumns,
+        colWidths: [] // turns out leaving array empty auto-sizes columns.
+      });
+
+      for (let i = 0; i < results.length; i++) {
+        inventoryTable.push(
+          [
+            results[i].item_id,
+            results[i].product_name,
+            results[i].department_name,
+            '\$' + parseFloat(results[i].price).toFixed(2),
+            results[i].stock_quantity
+          ]
+        );
       }
-    ]).then(answer => {
-      console.log(`productToBuy: ${answer.productToBuy}\namountToBuy: ${answer.amountToBuy}`);
-      // inquisition();
-    }).catch(error => {
-      console.error(error);
-    });
+
+      console.log(inventoryTable.toString());
+    }
+  );
+  console.log(query.sql);
 }
 
-function getItemsList() {
-  const inventoryColumns = ['item_id', 'product_name', 'department_name', 'price'];
-  const query = connection.query('SELECT ?? FROM ??', [inventoryColumns, 'products'], function (error, results, fields) {
-    if (error) throw error;
-    console.log(`\nInventory: `);
-
-    const inventoryTable = new Table({
-      head: inventoryColumns,
-      colWidths: [10, 45, 25, 10]
-    });
-
-    for (let i = 0; i < results.length; i++) {
-      inventoryTable.push(
-        [
-          results[i].item_id,
-          results[i].product_name,
-          results[i].department_name,
-          '\$' + parseFloat(results[i].price).toFixed(2)
-        ]
-      );
+// ask for item_id & amount to buy
+function inquisition() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'Please enter ID of product you\'d like to buy:',
+      name: 'productToBuy',
+    },
+    {
+      type: 'input',
+      message: 'How many would you like to buy?',
+      name: 'amountToBuy',
     }
-    console.log(inventoryTable.toString());
+  ]).then(answers => {
+    console.log(`productToBuy: ${answers.productToBuy}\namountToBuy: ${answers.amountToBuy}`);
+
+    checkStock(answers.productToBuy, answers.amountToBuy, );
+  }).catch(error => {
+    console.error(error);
   });
-  console.log(query.sql);
+}
+
+function checkStock(buyAmount, itemPrice, stockAmount) {
+  let soldAmount = (Number(stockAmount) - Number(buyAmount));
+  console.log(soldAmount);
+  if (soldAmount < 0) {
+    console.log(`Sorry, that item is sold out.`);
+
+    getItemsList();
+    inquisition();
+
+  } else {
+    let customerCharge = buyAmount * itemPrice;
+    console.log(`It worked!\nNow hand over \$${customerCharge} ... please.`)
+
+    const query2 = connection.query(
+      'SELECT ?? FROM ?? WHERE ?',
+      ['*', 'products', { item_id: answers.productToBuy }],
+      (error, results) => {
+        if (error) throw error;
+        console.log(`\nbuy stuff and update stock part...`);
+      }
+    );
+    console.log(query2.sql);
+  }
 }
