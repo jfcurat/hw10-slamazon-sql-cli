@@ -28,8 +28,8 @@ const connection = mysql.createConnection({
   database: DATABASE
 });
 
-connection.connect(function (error) {
-  if (error) throw error;
+connection.connect(err => {
+  if (err) throw err;
 
   console.log(`Connected as id ${connection.threadId}`);
 
