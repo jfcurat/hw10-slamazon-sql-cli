@@ -21,9 +21,3 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
         ('mesa/boogie subway D-800 head', 'sound gear', 799.99, 7), ('blast beats', 'sounds', 9000.00, 9999),
         ('guttural vocals', 'sounds', 7000.00, 6000), ('parasitic ejaculation - echoes of depravity', 'music albums', 7.00, 60),
         ('5-string bass' ,'musical instruments', 599.99, 5), ('drum set', 'musical instruments', 699.99, 11);
-
-SELECT * FROM products;
-SELECT product_name FROM products;
-SELECT product_name, price, stock_quantity FROM products;
-SELECT item_id, product_name, price FROM products;
-SELECT item_id, product_name, price, stock_quantity FROM products;
