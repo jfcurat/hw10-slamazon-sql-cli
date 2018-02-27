@@ -54,18 +54,18 @@ function makeInventoryTable() {
         );
       }
       console.log(inventoryTable.toString());
-      
+
       makeOrder();
     }
   );
   console.log(query.sql);
-/* 
-  return new Promise((resolve, reject) => {
-    if (reject) {
-      console.log(`promise rejected`);
-    }
-    console.log(resolve); // ??
-  }); */
+  /* 
+    return new Promise((resolve, reject) => {
+      if (reject) {
+        console.log(`promise rejected`);
+      }
+      console.log(resolve); // ??
+    }); */
   //makeOrder();
 }
 
@@ -117,16 +117,19 @@ function checkStock(productToBuy, amountToBuy) {
 
       if (stockAvailable - amountToBuy >= 0) {
         console.log(`The item is in stock.`);
+
+        updateStock();
       } else {
         console.log(`Sorry, that item is out of stock.`);
-        makeInventoryTable();
+        console.log(`Returning to main inventory list...`);
+
+        setTimeout(() => makeInventoryTable(), 1666);
       }
-      
     }
   );
   console.log(`\nquery from checkStock: ${queryStockCheck.sql}`);
 }
 
 function updateStock() {
-
+  console.log(`stock update time...`);
 }
