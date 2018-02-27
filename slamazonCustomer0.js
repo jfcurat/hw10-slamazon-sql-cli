@@ -23,8 +23,8 @@ connection.connect(err => {
   console.log(`Connected as id ${connection.threadId}`);
 
   makeInventoryTable()//.then(makeOrder()).catch(err => {console.error(err)});
-  makeOrder();
-  connection.end();
+  //makeOrder();
+  //connection.end();
 });
 
 function makeInventoryTable() {
@@ -54,16 +54,19 @@ function makeInventoryTable() {
         );
       }
       console.log(inventoryTable.toString());
+      
+      makeOrder();
     }
   );
   console.log(query.sql);
-
+/* 
   return new Promise((resolve, reject) => {
     if (reject) {
       console.log(`promise rejected`);
     }
     console.log(resolve); // ??
-  });
+  }); */
+  //makeOrder();
 }
 
 function makeOrder() {
@@ -81,8 +84,10 @@ function makeOrder() {
   ]).then(answers => {
     console.log(`\nfrom makeOrder, productToBuy: ${answers.productToBuy}, amountToBuy: ${answers.amountToBuy}`);
 
-    var productToBuy = answers.productToBuy;
+    var productToBuy = Number(answers.productToBuy);
     var amountToBuy = Number(answers.amountToBuy);
+    console.log(`\npass from makeOrder to checkStock, productToBuy = ${productToBuy}`);
+    console.log(`pass from makeOrder to checkStock, amountToBuy = ${amountToBuy}`);
 
     checkStock(productToBuy, amountToBuy);
   }).catch(err => {
@@ -91,5 +96,17 @@ function makeOrder() {
 }
 
 function checkStock(productToBuy, amountToBuy) {
-  console.log(`\ndid it work? Buy ${productToBuy}. how many? ${amountToBuy}`);
+  console.log(`\nfrom checkStock, did it work? Buy itemID ${productToBuy}. how many? ${amountToBuy}`);
+
+  let stockCheckColumns = ['item_id', 'price', 'stock_quantity']
+
+  const queryStockCheck = connection.query(
+    'SELECT ?? FROM ?? WHERE ?',
+    [stockCheckColumns, 'products', { item_id: productToBuy }],
+    (err, res) => {
+      if (err) throw err;
+      console.log(`\ncheckStock action worked?`);
+    }
+  );
+  console.log(`\nquery from checkStock: ${queryStockCheck.sql}`);
 }
