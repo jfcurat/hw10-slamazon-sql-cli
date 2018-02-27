@@ -145,6 +145,12 @@ function updateStock(productToBuy, amountToBuy, unitPrice, stockRemaining) {
     ['products', { stock_quantity: stockRemaining }, {item_id: productToBuy}],
     (err, res) => {
       if (err) throw err;
+      console.log(res);
+      console.log(`\nYour total cost is \$${totalCost}`);
+
+      setTimeout(() => console.log(`\nThank you! Come again!`), 1666);
+
+      setTimeout(() => connection.end(), 2666);
     }
   );
   console.log(`\nquery from updateStock: ${stockUpdateQuery.sql}`);
