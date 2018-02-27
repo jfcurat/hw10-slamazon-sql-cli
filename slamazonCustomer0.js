@@ -98,7 +98,7 @@ function makeOrder() {
 function checkStock(productToBuy, amountToBuy) {
   console.log(`\nfrom checkStock, did it work? Buy itemID ${productToBuy}. how many? ${amountToBuy}`);
 
-  let stockCheckColumns = ['item_id', 'price', 'stock_quantity']
+  let stockCheckColumns = ['item_id', 'price', 'stock_quantity'];
 
   const queryStockCheck = connection.query(
     'SELECT ?? FROM ?? WHERE ?',
@@ -106,8 +106,27 @@ function checkStock(productToBuy, amountToBuy) {
     (err, res) => {
       if (err) throw err;
       console.log(`\ncheckStock action worked?`);
+      console.log(res);
+      console.log(productToBuy);
+
+      var stockAvailable = res[0].stock_quantity;
+      var cost = res[0].price;
+      console.log(stockAvailable);
+      console.log(amountToBuy);
+      console.log(cost);
+
+      if (stockAvailable - amountToBuy >= 0) {
+        console.log(`The item is in stock.`);
+      } else {
+        console.log(`Sorry, that item is out of stock.`);
+        makeInventoryTable();
+      }
+      
     }
   );
   console.log(`\nquery from checkStock: ${queryStockCheck.sql}`);
 }
 
+function updateStock() {
+
+}
