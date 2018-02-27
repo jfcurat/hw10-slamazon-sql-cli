@@ -110,3 +110,4 @@ function checkStock(productToBuy, amountToBuy) {
   );
   console.log(`\nquery from checkStock: ${queryStockCheck.sql}`);
 }
+
