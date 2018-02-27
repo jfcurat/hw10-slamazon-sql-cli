@@ -110,15 +110,17 @@ function checkStock(productToBuy, amountToBuy) {
       console.log(productToBuy);
 
       var stockAvailable = res[0].stock_quantity;
-      var cost = res[0].price;
-      console.log(stockAvailable);
-      console.log(amountToBuy);
-      console.log(cost);
+      var unitPrice = res[0].price;
+      console.log(`units in stock: ${stockAvailable}`);
+      console.log(`amountToBuy = ${amountToBuy}`);
+      console.log(`price per unit = ${unitPrice}`);
+      var stockRemaining = stockAvailable - amountToBuy;
+      console.log(`remaining stock: ${stockRemaining}`);
 
-      if (stockAvailable - amountToBuy >= 0) {
+      if (stockRemaining >= 0) {
         console.log(`The item is in stock.`);
 
-        updateStock();
+        updateStock(amountToBuy, unitPrice);
       } else {
         console.log(`Sorry, that item is out of stock.`);
         console.log(`Returning to main inventory list...`);
@@ -130,6 +132,9 @@ function checkStock(productToBuy, amountToBuy) {
   console.log(`\nquery from checkStock: ${queryStockCheck.sql}`);
 }
 
-function updateStock() {
+function updateStock(amountToBuy, unitPrice) {
   console.log(`stock update time...`);
+  console.log(`from updateStock, amountToBuy = ${amountToBuy}`);
+  console.log(`from updateStock, unitPrice = ${unitPrice}`);
+
 }
