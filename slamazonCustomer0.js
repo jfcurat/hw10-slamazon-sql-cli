@@ -30,7 +30,7 @@ function makeInventoryTable() {
     [inventoryColumns, 'products'],
     (err, res) => {
       if (err) throw err;
-      
+
       console.log(`\nInventory: `);
 
       let inventoryTable = new Table({
@@ -106,7 +106,7 @@ function checkStock(productToBuy, amountToBuy) {
 }
 
 function updateStock(productToBuy, amountToBuy, unitPrice, stockRemaining) {
-  var totalCost = amountToBuy * unitPrice;
+  var totalCost = parseFloat(amountToBuy * unitPrice).toFixed(2);
 
   const stockUpdateQuery = connection.query(
     'UPDATE ?? SET ? WHERE ?',
