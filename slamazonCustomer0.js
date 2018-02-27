@@ -111,18 +111,18 @@ function checkStock(productToBuy, amountToBuy) {
 
       var stockAvailable = res[0].stock_quantity;
       var unitPrice = res[0].price;
-      console.log(`units in stock: ${stockAvailable}`);
+      console.log(`\nunits in stock: ${stockAvailable}`);
       console.log(`amountToBuy = ${amountToBuy}`);
       console.log(`price per unit = ${unitPrice}`);
       var stockRemaining = stockAvailable - amountToBuy;
       console.log(`remaining stock: ${stockRemaining}`);
 
       if (stockRemaining >= 0) {
-        console.log(`The item is in stock.`);
+        console.log(`\nThe item is in stock.`);
 
-        updateStock(amountToBuy, unitPrice);
+        updateStock(productToBuy, amountToBuy, unitPrice, stockRemaining);
       } else {
-        console.log(`Sorry, that item is out of stock.`);
+        console.log(`\nSorry, that item is out of stock.`);
         console.log(`Returning to main inventory list...`);
 
         setTimeout(() => makeInventoryTable(), 1666);
@@ -132,9 +132,20 @@ function checkStock(productToBuy, amountToBuy) {
   console.log(`\nquery from checkStock: ${queryStockCheck.sql}`);
 }
 
-function updateStock(amountToBuy, unitPrice) {
-  console.log(`stock update time...`);
+function updateStock(productToBuy, amountToBuy, unitPrice, stockRemaining) {
+  console.log(`\nstock update time...`);
   console.log(`from updateStock, amountToBuy = ${amountToBuy}`);
   console.log(`from updateStock, unitPrice = ${unitPrice}`);
+  console.log(`from updateStock, stockRemaining = ${stockRemaining}`);
+  var totalCost = amountToBuy * unitPrice;
+  console.log(`from updateStock, totalCost = ${totalCost}`);
 
+  const stockUpdateQuery = connection.query(
+    'UPDATE ?? SET ? WHERE ?',
+    ['products', { stock_quantity: stockRemaining }, {item_id: productToBuy}],
+    (err, res) => {
+      if (err) throw err;
+    }
+  );
+  console.log(`\nquery from updateStock: ${stockUpdateQuery.sql}`);
 }
